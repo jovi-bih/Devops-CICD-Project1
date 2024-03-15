@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abctech
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: abctechdeploy
+  template:
+    metadata:
+      name: mypod1
+      labels:
+        name: abctechdeploy
+    spec:
+      containers:
+        - name: mycontainer
+          image: jovibih/ci-pipeline:latest # replace with your Docker-image pushed on Dockerhub
+          ports:
+            - containerPort: 8080
