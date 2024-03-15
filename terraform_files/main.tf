@@ -57,7 +57,7 @@ resource "aws_instance" "my_ec2_instance1" {
   ami                    = "ami-0d7a109bf30624c99"
   instance_type          = "t2.medium"
   vpc_security_group_ids = [aws_security_group.my_security_group1.id]
-  key_name               = "joykey.pem" # paste your key-name here, do not use extension '.pem'
+  key_name               = "joykey" # paste your key-name here, do not use extension '.pem'
 
   # Consider EBS volume 30GB
   root_block_device {
