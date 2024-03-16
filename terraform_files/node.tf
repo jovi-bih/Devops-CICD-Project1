@@ -75,7 +75,7 @@ resource "aws_security_group" "my_security_group2" {
 # Note: i. First create a pem-key manually from the AWS console
 #      ii. Copy it in the same directory as your terraform code
 resource "aws_instance" "my_ec2_instance2" {
-  ami                    = "ami-0cf10cdf9fcd62d37"
+  ami                    = "ami-0d7a109bf30624c99"
   instance_type          = "t2.medium" # K8s requires min 2CPU & 4G RAM
   vpc_security_group_ids = [aws_security_group.my_security_group2.id]
   key_name               = "joykey" # paste your key-name here, do not use extension '.pem'
