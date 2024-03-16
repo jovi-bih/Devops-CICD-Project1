@@ -91,63 +91,64 @@ resource "aws_instance" "my_ec2_instance2" {
   }
 
   # STEP3: USING REMOTE-EXEC PROVISIONER TO INSTALL TOOLS
-  #provisioner "remote-exec" {
+  provisioner "remote-exec" {
     # ESTABLISHING SSH CONNECTION WITH EC2
-    #connection {
-      #type        = "ssh"
-      #private_key = file("./joykey.pem") # replace with your key-name 
-      #user        = "ec2-user"
-      #host        = self.public_ip
-    #}
-     user_data = <<-EOF
+    connection {
+      type        = "ssh"
+      private_key = file("./joykey.pem") # replace with your key-name 
+      user        = "ec2-user"
+      host        = self.public_ip
+    }
+
+    #user_data = <<-EOF
     #!/bin/bash
     # wait for 1min before EC2 initialization
-    #inline = [
-      #sleep 200
-      #chmod 400 joykey.pem
+    inline = [
+      "sleep 200",
+      "chmod 400 joykey.pem",
 
       # Install Docker
       # REF: https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
-      sudo yum update -y
-      sudo yum install docker -y
-      sudo systemctl start docker
-      sudo systemctl enable docker
-      sudo chmod 777 /var/run/docker.sock
+      "sudo yum update -y",
+      "sudo yum install docker -y",
+      "sudo systemctl start docker",
+      "sudo systemctl enable docker",
+      "sudo chmod 777 /var/run/docker.sock",
 
       # Install K8s
       # REF: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
-      sudo setenforce 0
-      sudo sed -i 's/^SELINUX=enforcing$$/SELINUX=permissive/' /etc/selinux/config
-      cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
-      [kubernetes]
-      name=Kubernetes
-      baseurl=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/
-      enabled=1
-      gpgcheck=1
-      gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key
-      exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
-      
-      sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
-      sudo systemctl enable --now kubelet
-      sudo kubeadm init --pod-network-cidr=10.244.0.0/16  --ignore-preflight-errors=NumCPU --ignore-preflight-errors=Mem
-      sudo mkdir -p $HOME/.kube
-      sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
-      sudo chown $(id -u):$(id -g) $HOME/.kube/config
-      kubectl apply -f https://docs.projectcalico.org/v3.18/manifests/calico.yaml
-      kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
-      kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-    EOF
-    #]
+      "sudo setenforce 0",
+      "sudo sed -i 's/^SELINUX=enforcing$$/SELINUX=permissive/' /etc/selinux/config",
+      "cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo",
+      "[kubernetes]",
+      "name=Kubernetes",
+      "baseurl=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/",
+      "enabled=1",
+      "gpgcheck=1",
+      "gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key",
+      "exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni",
+
+      "sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes",
+      "sudo systemctl enable --now kubelet",
+      "sudo kubeadm init --pod-network-cidr=10.244.0.0/16  --ignore-preflight-errors=NumCPU --ignore-preflight-errors=Mem",
+      "sudo mkdir -p $HOME/.kube",
+      "sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config",
+      "sudo chown $(id -u):$(id -g) $HOME/.kube/config",
+      "kubectl apply -f https://docs.projectcalico.org/v3.18/manifests/calico.yaml",
+      "kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml",
+      "kubectl taint nodes --all node-role.kubernetes.io/control-plane-",
+    ]
   }
+}
 
 
 
 # STEP3: OUTPUT PUBLIC IP OF EC2 INSTANCE
-output "NODE_SERVER_PUBLIC_IP" {
+output "K8s_SERVER_PUBLIC_IP" {
   value = aws_instance.my_ec2_instance2.public_ip
 }
 
 # STEP4: OUTPUT PRIVATE IP OF EC2 INSTANCE
-output "NODE_SERVER_PRIVATE_IP" {
+output "K8s_SERVER_PRIVATE_IP" {
   value = aws_instance.my_ec2_instance2.private_ip
 }
