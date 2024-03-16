@@ -8,8 +8,8 @@ pipeline {
     agent any
     // DECLARE THE VARIABLES HERE:
     environment {
-        TOMCAT_HOST = 'localhost'
-        DOCKER_REGISTRY = 'jovibih'
+        //TOMCAT_HOST = 'localhost'
+        //DOCKER_REGISTRY = 'jovibih'
         DOCKER_USERNAME = "jovibih"
              // check the 'ID' in your Jenkins credentials
     }
@@ -24,9 +24,9 @@ pipeline {
 
         stage ('2. Git Checkout') {
             // use pipeline syntax generator to generate below step
-            // 'Pipeline syntax' --> Steps 'Smaple step' --> git (enter url & branch & generate)
+            // 'Pipeline syntax' --> Steps 'Sample step' --> git (enter url & branch & generate)
             steps {
-                dir ("abc technologies"){
+                dir ("Devops-CICD-Project1"){
                   script {
                     git branch: 'main', url: 'https://github.com/jovi-bih/Devops-CICD-Project1.git' 
                   }
