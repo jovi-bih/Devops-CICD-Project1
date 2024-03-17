@@ -28,7 +28,7 @@ pipeline {
             steps {
                 dir ("Devops-CICD-Project1"){
                   script {
-                    git branch: 'main', url: 'https://github.com/jovi-bih/Devops-CICD-Project1.git' 
+                    git branch: 'main', url: 'https://github.com/jovi-bih/Devops-CICD-Project1.git'
                   }
                 }
             }
