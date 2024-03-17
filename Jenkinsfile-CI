@@ -44,7 +44,7 @@ pipeline {
         }
 
         stage('4. Maven Build') {
-            // Build the application into an executable file (.jar)
+            // Build the application into an executable file (.war/.jar)
             steps{
                 dir ("Devops-CICD-Project1"){
                   sh 'mvn clean install'   
