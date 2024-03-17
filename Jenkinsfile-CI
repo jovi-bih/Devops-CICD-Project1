@@ -37,7 +37,7 @@ pipeline {
         stage("3. Maven Unit Test") {  
             // Test the individual units of code 
             steps{
-                dir ("Devops-CICD-Project1"){
+                dir ("ABC Tech-CICD"){
                   sh 'mvn test'        
                 }
             }
@@ -46,7 +46,7 @@ pipeline {
         stage('4. Maven Build') {
             // Build the application into an executable file (.jar)
             steps{
-                dir ("Devops-CICD-Project1"){
+                dir ("ABC Tech-CICD"){
                   sh 'mvn clean install'   
                 }
             }
